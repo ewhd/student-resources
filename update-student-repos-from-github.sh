@@ -22,7 +22,8 @@ printf -v messagevar "\n"
 # Within each loop tries to run `git pull origin main`.
 # If it succeeds/fails, it adds a message to our messagevar, then continues 
 for d in */*/ ; do
-    if (cd $d;(git pull origin main))
+    # if (cd $d;(git pull origin))
+    if (cd $d;(git reset --hard origin ; git pull origin main || git pull origin master)) #this should over-write changes
     then
         printf -v messagevar "${messagevar}%-40s Updated\n" $d
         continue
