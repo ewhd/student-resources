@@ -56,23 +56,6 @@ def LoadKey(file_name="key.key"):
     return open(file_name, "rb").read()
 
 
-# These two functions have been combined and reformed into EncryptDecryptBytes() and EncryptDecryptString() below, but I leave them here for posterity
-def Encrypt(unencrypted_string, key):
-    # This function takes a string and a key as arguments, converts the string to bytes, 
-    # encrypts it using the key, converts the encrypted bytes back to a string and returns that string
-    unencrypted_bytes = unencrypted_string.encode()
-    f = Fernet(key)
-    encrypted_bytes = f.encrypt(unencrypted_bytes)
-    return encrypted_bytes.decode('utf-8')
-
-def Decrypt(encrypted_string, key):
-    # This function takes a string and a key as arguments, converts the string to bytes, 
-    # decrypts it using the key, converts the decrypted bytes back to a string and returns that string
-    encrypted_bytes = encrypted_string.encode()
-    f = Fernet(key)
-    decrypted_bytes = f.decrypt(encrypted_bytes)
-    return decrypted_bytes.decode('utf-8')
-
 def EncryptDecryptBytes(option, input_bytes, key):
     # This function takes an option flag, bytes, and a key as arguments, evaluates the option flag to 
     # either encrypt or decrypt using the key, then returns the result
@@ -82,11 +65,13 @@ def EncryptDecryptBytes(option, input_bytes, key):
         output_bytes = Fernet(key).decrypt(input_bytes)
     return output_bytes
 
+
 def EncryptDecryptString(option, input_string, key):
     # This function just wraps EncryptDecryptBytes() to take and return strings
     input_bytes = input_string.encode()
     output_bytes = EncryptDecryptBytes(option, input_bytes, key)
     return output_bytes.decode('utf-8')
+
 
 def EncryptDecryptFile(option, file_name, key):
     # This function wraps EncryptDecryptBytes() to handle files
@@ -104,6 +89,7 @@ def EncryptDecryptFile(option, file_name, key):
         file.write(file_output)
     file.close()
 
+
 def EncryptDecryptDir(option, dir_path, key):
     # This function uses EncryptDecryptFile() to recursively effect a directory and its contents
 
@@ -111,6 +97,7 @@ def EncryptDecryptDir(option, dir_path, key):
     for root, dirs, files in os.walk(dir_path, topdown=False):
         for name in files:
             EncryptDecryptFile(option, os.path.join(root, name), key)
+
 
 def GetCheckPath(path_type):
     # This function gets an input from the user and if it is a valid file path returns that path. 
@@ -137,10 +124,12 @@ def CheckForKey(key_var):
     else:
         return True
 
+
 def PauseForUser():
     # Pauses until the user presses a key.
     # I have this in here a lot and was tired of copy/pasting it.
     input("Press any key to return to menu...\n\n")
+
 
 def menu(program_mode_list):
     # This function displays a menu, validates user choice, and either returns the integer or exits the program
