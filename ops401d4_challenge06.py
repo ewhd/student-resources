@@ -99,16 +99,22 @@ def EncryptDecryptDir(option, dir_path, key):
             EncryptDecryptFile(option, os.path.join(root, name), key)
 
 
-def GetCheckPath(path_type):
-    # This function gets an input from the user and if it is a valid file path returns that path. 
-    # Otherwise it asks the user again, or else the user can escape.
+def GetCheckPathFromUser(path_type="system"):
+    # This function gets an input from the user and checks if it is a valid path. If it is not,
+    # it prompts the user again, unless they type "#back".
+    # This function takes an optional argument to check if the user's input is exclusively a
+    # valid file path or a valid directory path.
+    # If the path is valid it returns the path.
     while True:
-        path = input("Please enter a valid " + path_type + " path or 'back' to return to the previous menu: ")
-        if path_type == "file" and os.path.isfile(path):
+        path = input("Please enter a valid " + path_type + " path or '#back' to return to the previous menu: ")
+        
+        if path_type == "system" and (os.path.isfile(path) or os.path.isdir(path)):
             return path
-        if path_type == "directory" and os.path.isdir(path):
+        elif path_type == "file" and os.path.isfile(path):
             return path
-        if path == "back":
+        elif path_type == "directory" and os.path.isdir(path):
+            return path
+        elif path == "#back":
             return None
         else:
             print("That is not a valid " + path_type + " path or option. Try again.\n")
@@ -214,7 +220,7 @@ def main():
 
         if option == 6:
             if CheckForKey(current_key):
-                target_file = GetCheckPath("file")
+                target_file = GetCheckPathFromUser("file")
                 if target_file != None:
                     EncryptDecryptFile("encrypt", target_file, current_key)
                     print("\nThe file at " + target_file + " has been encrypted using the following key: \n" + current_key.decode('utf-8') + "\n\n")
@@ -222,7 +228,7 @@ def main():
 
         if option == 7:
             if CheckForKey(current_key):
-                target_file = GetCheckPath("file")
+                target_file = GetCheckPathFromUser("file")
                 if target_file != None:
                     try:
                         EncryptDecryptFile("decrypt", target_file, current_key)
@@ -234,7 +240,7 @@ def main():
 
         if option == 8:
             if CheckForKey(current_key):
-                target_dir = GetCheckPath("directory")
+                target_dir = GetCheckPathFromUser("directory")
                 if target_dir != None:
                     EncryptDecryptDir("encrypt", target_dir, current_key)
                     print("\nThe contents of the directory " + target_dir + " have all been encrypted using the following key: \n" + current_key.decode('utf-8') + "\n\n")
@@ -242,7 +248,7 @@ def main():
 
         if option == 9:
             if CheckForKey(current_key):
-                target_dir = GetCheckPath("directory")
+                target_dir = GetCheckPathFromUser("directory")
                 if target_dir != None:
                     try:
                         EncryptDecryptDir("decrypt", target_dir, current_key)
@@ -253,4 +259,5 @@ def main():
                         PauseForUser()
 
 
-main()
+if __name__ == "__main__":
+    main()
