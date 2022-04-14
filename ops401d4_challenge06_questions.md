@@ -4,7 +4,7 @@
 - Look at the rest of the functions (besides `main()`) -- how much code is repeated? Do you see anything that could be reduced or combined?
 - How many of the functions do you think you could re-use? Would you need to change them? How would you change them?
 - How many functions print feedback for the user? How many of them can be called silently to operate in the background?
-- Are there any uses of code here that you've never seen before? For example, the use of dictionaries, the function arguments in line 34, the booleans in line 111, "try...except" on lines 158 and 164, or `if __name__ == "__main__":` in line 271. What do these do? Why might these be useful or necessary?
+- Are there any uses of code here that you've never seen before? For example, the use of dictionaries, the function arguments in line 34, `kwargs` on line 76, the booleans in line 108, "try...except" on lines 155 and 161, or `if __name__ == "__main__":` on line 276. What do these do? Why might these be useful or necessary?
 - On lines 28 and 29, the two program modes are listed out of order, but when the script is executed the menu displays in numerical order. How does this occur?
 - Why use a dictionary to store the program modes? What all benefits might this bring? What are the downsides?
 - Assume you have written a new function/feature. Besides the function itself, how many places in the code will you need to make changes in order to itegrate it into the menu system?
