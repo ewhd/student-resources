@@ -56,7 +56,7 @@ def LoadKey(file_name="key.key"):
     return open(file_name, "rb").read()
 
 
-def EncryptDecryptBytes(option, input_bytes, key):
+def EncryptDecryptBytes(input_bytes, option, key):
     # This function takes an option flag, bytes, and a key as arguments, evaluates the option flag to 
     # either encrypt or decrypt using the key, then returns the result
     if option == "encrypt":
@@ -66,37 +66,34 @@ def EncryptDecryptBytes(option, input_bytes, key):
     return output_bytes
 
 
-def EncryptDecryptString(option, input_string, key):
+def EncryptDecryptString(input_string, option, key):
     # This function just wraps EncryptDecryptBytes() to take and return strings
     input_bytes = input_string.encode()
-    output_bytes = EncryptDecryptBytes(option, input_bytes, key)
+    output_bytes = EncryptDecryptBytes(input_bytes, option, key)
     return output_bytes.decode('utf-8')
 
 
-def EncryptDecryptFile(option, file_name, key):
-    # This function wraps EncryptDecryptBytes() to handle files
-
-    # Read the plaintext contents of the file into a variable
-    with open(file_name, "rb") as file:
-        file_input = file.read()
-    file.close()
-
-    # Encrypt or decrypt the contents of the file
-    file_output = EncryptDecryptBytes(option, file_input, key)
+def ApplyFunctionRecursivelyToFilesInDir(function, dir_path, **kwargs):
+    # This function calls another function recursively to every file in a directory.
     
-    # Write the encrypted data back into the file, replacing the original contents
-    with open(file_name, "wb") as file:
-        file.write(file_output)
-    file.close()
+    # This function takes a directory path and another function as arguments, as well as
+    # unlimited keyword arguments. It assumes that the passed function's first argument 
+    # is a path to a directory and that any other arguments it needs will be passed as kwargs.
 
+    # The function tries to walk through the directory and recursively apply the passed 
+    # function to every file it finds.
+    
+    # Finally it returns True/False based on whether it succeeded or if something went wrong.
+    # Errors are most likely to be caused by poor configuration of the passed arguments.
 
-def EncryptDecryptDir(option, dir_path, key):
-    # This function uses EncryptDecryptFile() to recursively effect a directory and its contents
-
-    # Walk through the given directory, calling EncryptDecryptFile() on each file
-    for root, dirs, files in os.walk(dir_path, topdown=False):
-        for name in files:
-            EncryptDecryptFile(option, os.path.join(root, name), key)
+    # Walk through the given directory, calling the argued function on each file
+    try:
+        for root, dirs, files in os.walk(dir_path, topdown=False):
+            for name in files:
+                function(os.path.join(root, name), **kwargs)
+        return True
+    except:
+        return False
 
 
 def GetCheckPathFromUser(path_type="system"):
@@ -137,27 +134,27 @@ def PauseForUser():
     input("Press any key to return to menu...\n\n")
 
 
-def menu(program_mode_list):
+def menu(program_mode_dict):
     # This function displays a menu, validates user choice, and either returns the integer or exits the program
     # This function takes a dictionary of number coded program modes as an argument, adds an additional mode to quit
     # then prints a menu of codes and modes with ordered by code.
     # Then it prompts the user for a number to select, checks that it is a valid option, and if it is returns that number.
 
     # If it doesn't already exist, add a final "Exit" option to the dictionary of program modes
-    exit_code = len(program_mode_list)
-    if program_mode_list[len(program_mode_list)] != "Exit":
+    exit_code = len(program_mode_dict)
+    if program_mode_dict[len(program_mode_dict)] != "Exit":
         exit_code += 1
-        program_mode_list[exit_code] = "Exit"
+        program_mode_dict[exit_code] = "Exit"
 
     # Display menu options:
-    for code in sorted (program_mode_list.keys()):
-        print(str(code) + ". " + program_mode_list[code])
+    for code in sorted (program_mode_dict.keys()):
+        print(str(code) + ". " + program_mode_dict[code])
 
     # This section requests the user to choose one of the options given. It loops until a valid option is selected.
     while True:
         try:
             mode_int_var = int(input("Enter the number of the option you wish to use: "))
-            if mode_int_var in program_mode_list:
+            if mode_int_var in program_mode_dict:
                 break
             else:
                 print("That's not an option! Please try again")
@@ -208,7 +205,7 @@ def main():
         if option == 4:
             if CheckForKey(current_key):
                 message_to_encrypt = input("What is the message you would like to encrypt?\n> ")
-                print("Your encrypted message is:\n" + EncryptDecryptString("encrypt", message_to_encrypt, current_key) + "\n")
+                print("Your encrypted message is:\n" + EncryptDecryptString(message_to_encrypt, "encrypt", current_key) + "\n")
                 PauseForUser()
 
         # Decrypt a message
@@ -216,7 +213,7 @@ def main():
             if CheckForKey(current_key):
                 message_to_encrypt = input("What is the message you would like to decrypt?\n> ")
                 try:
-                    decrypted_message = EncryptDecryptString("decrypt", message_to_encrypt, current_key)
+                    decrypted_message = EncryptDecryptString(message_to_encrypt, "decrypt", current_key)
                     print("Your decrypted message is:\n" + decrypted_message + "\n")
                     PauseForUser()
                 except:
@@ -228,8 +225,8 @@ def main():
             if CheckForKey(current_key):
                 target_file = GetCheckPathFromUser("file")
                 if target_file != None:
-                    EncryptDecryptFile("encrypt", target_file, current_key)
-                    print("\nThe file at " + target_file + " has been encrypted using the following key: \n" + current_key.decode('utf-8') + "\n\n")
+                    EncryptDecryptFile(target_file, "encrypt", current_key)
+                    print("\nThe file at " + target_file + " has been encrypted using the current key: \n" + current_key.decode('utf-8') + "\n\n")
                     PauseForUser()
 
         # Decrypt a file
@@ -238,8 +235,8 @@ def main():
                 target_file = GetCheckPathFromUser("file")
                 if target_file != None:
                     try:
-                        EncryptDecryptFile("decrypt", target_file, current_key)
-                        print("\nThe file at " + target_file + " has been decrypted using the following key: \n" + current_key.decode('utf-8') + "\n\n")
+                        EncryptDecryptFile(target_file, "decrypt", current_key)
+                        print("\nThe file at " + target_file + " has been decrypted using the current key: \n" + current_key.decode('utf-8') + "\n\n")
                         PauseForUser()
                     except:
                         print("\nThe key does not seem to fit the lock. Load the correct key and try again.\n")
@@ -250,9 +247,13 @@ def main():
             if CheckForKey(current_key):
                 target_dir = GetCheckPathFromUser("directory")
                 if target_dir != None:
-                    EncryptDecryptDir("encrypt", target_dir, current_key)
-                    print("\nThe contents of the directory " + target_dir + " have all been encrypted using the following key: \n" + current_key.decode('utf-8') + "\n\n")
-                    PauseForUser()
+                    did_it_work = ApplyFunctionRecursivelyToFilesInDir(EncryptDecryptFile, target_dir, option="encrypt", key=current_key)
+                    if did_it_work == True:
+                        print("\nThe contents of the directory " + target_dir + " have all been encrypted using the current key: \n" + current_key.decode('utf-8') + "\n\n")
+                        PauseForUser()
+                    elif did_it_work == False:
+                        print("ERROR: something is wrong with the arguments and/or keyword arguments.\n")
+                        PauseForUser()
 
         # Recursively decrypt a directory
         if option == 9:
@@ -260,13 +261,16 @@ def main():
                 target_dir = GetCheckPathFromUser("directory")
                 if target_dir != None:
                     try:
-                        EncryptDecryptDir("decrypt", target_dir, current_key)
-                        print("\nThe contents of the directory " + target_dir + " have all been decrypted using the following key: \n" + current_key.decode('utf-8') + "\n\n")
-                        PauseForUser()
+                        did_it_work = ApplyFunctionRecursivelyToFilesInDir(EncryptDecryptFile, target_dir, option="decrypt", key=current_key)
+                        if did_it_work == True:
+                            print("\nThe contents of the directory " + target_dir + " have all been decrypted using the current key: \n" + current_key.decode('utf-8') + "\n\n")
+                            PauseForUser()
+                        elif did_it_work == False:
+                            print("ERROR: something is wrong with the arguments and/or keyword arguments.\n")
+                            PauseForUser()
                     except:
                         print("\nThe key does not seem to fit the lock. Load the correct key and try again.\n")
                         PauseForUser()
-
 
 if __name__ == "__main__":
     main()
