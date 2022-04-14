@@ -1,0 +1,15 @@
+- Why use a dictionary to store the program modes? What benefit does this bring?
+- Look at the 4 differenc functions which handle encryption/decryption -- how much code is repeated?
+- Look at the rest of the functions (besides main()) -- how much code is repeated? Do you see anything that could be reduced or combined?
+- How many of the functions do you think you could re-use? Would you need to change them? How would you change them?
+- How many functions print feedback for the user? How many of them can be called silently to operate in the background?
+- Are there any uses of code here that you've never seen before? For example, the use of dictionaries, the function arguments in line 34, the booleans in line 111, "try...except" on lines 158 and 164, or `if __name__ == "__main__":` in line 271. What do these do? Why might these be useful or necessary?
+- Look at the comments at the start of each function and within sections of each function -- is it clear from the comments what the code does and how? How much do you need to read the code to understand what each part does? Is reading the comments faster than reading (someone else's) code?
+- Look at the syntax of the code and comments -- not having written it yourself, how easy is it to read and understand this code? How could the author have made it easier?
+- On lines 28 and 29, the two program modes are listed out of order, but when the script is executed the menu displays in numerical order. How does this occur?
+- Assume you have written a new function/feature. Besides the function itself, how many places in the code will you need to make changes in order to itegrate it into the menu system?
+- Run the program and explore its features.
+  - What do you try, and how do you go about systematically testing it?
+  - Can you cause the program to crash?
+  - Are you confident that either there are no bugs or that you have found all the bugs?
+  - How does the code handle errors so that it avoids crashes?
