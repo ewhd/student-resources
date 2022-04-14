@@ -182,6 +182,7 @@ def main():
 
         print("\nYou have chosen to: " + program_modes[option] + "\n")
 
+        # Generate and load a new key
         if option == 1:
             key_name = input("What would you like to name this key?\n(Default: key.key)\n> ") or "key.key"
             print(type(key_name))
@@ -190,23 +191,27 @@ def main():
             print("\nA new key has been written to " + key_file_name + "\nThe current key is: \n" + current_key.decode('utf-8') + "\n")
             PauseForUser()
 
+        # Load an existing key
         if option == 2:
             key_file_name = input("What is the name of the key file you wish to load? Don't forget the '.key' on the end!\n(Default: key.key)\n> ") or "key.key"
             current_key = LoadKey(key_file_name)
             print("\nThe key in " + key_file_name + " has been loaded.\nThe current key is: \n" + current_key.decode('utf-8') + "\n")
             PauseForUser()
 
+        # Show the current key
         if option == 3:
             if CheckForKey(current_key):
                 print("The current key is:\n" + current_key.decode('utf-8') + "\n")
                 PauseForUser()
 
+        # Encrypt a message
         if option == 4:
             if CheckForKey(current_key):
                 message_to_encrypt = input("What is the message you would like to encrypt?\n> ")
                 print("Your encrypted message is:\n" + EncryptDecryptString("encrypt", message_to_encrypt, current_key) + "\n")
                 PauseForUser()
 
+        # Decrypt a message
         if option == 5:
             if CheckForKey(current_key):
                 message_to_encrypt = input("What is the message you would like to decrypt?\n> ")
@@ -218,6 +223,7 @@ def main():
                     print("\nThe key does not seem to fit the lock. Load the correct key and try again.\n")
                     PauseForUser()
 
+        # Encrypt a file
         if option == 6:
             if CheckForKey(current_key):
                 target_file = GetCheckPathFromUser("file")
@@ -226,6 +232,7 @@ def main():
                     print("\nThe file at " + target_file + " has been encrypted using the following key: \n" + current_key.decode('utf-8') + "\n\n")
                     PauseForUser()
 
+        # Decrypt a file
         if option == 7:
             if CheckForKey(current_key):
                 target_file = GetCheckPathFromUser("file")
@@ -238,6 +245,7 @@ def main():
                         print("\nThe key does not seem to fit the lock. Load the correct key and try again.\n")
                         PauseForUser()
 
+        # Recursively encrypt a directory
         if option == 8:
             if CheckForKey(current_key):
                 target_dir = GetCheckPathFromUser("directory")
@@ -246,6 +254,7 @@ def main():
                     print("\nThe contents of the directory " + target_dir + " have all been encrypted using the following key: \n" + current_key.decode('utf-8') + "\n\n")
                     PauseForUser()
 
+        # Recursively decrypt a directory
         if option == 9:
             if CheckForKey(current_key):
                 target_dir = GetCheckPathFromUser("directory")
