@@ -72,6 +72,22 @@ def EncryptDecryptString(input_string, option, key):
     output_bytes = EncryptDecryptBytes(input_bytes, option, key)
     return output_bytes.decode('utf-8')
 
+def EncryptDecryptFile(file_name, option, key):
+    # This function wraps EncryptDecryptBytes() to handle files
+
+    # Read the plaintext contents of the file into a variable
+    with open(file_name, "rb") as file:
+        file_input = file.read()
+    file.close()
+
+    # Encrypt or decrypt the contents of the file
+    file_output = EncryptDecryptBytes(file_input, option, key)
+
+    # Write the encrypted data back into the file, replacing the original contents
+    with open(file_name, "wb") as file:
+        file.write(file_output)
+    file.close()
+
 
 def ApplyFunctionRecursivelyToFilesInDir(function, dir_path, **kwargs):
     # This function calls another function recursively to every file in a directory.
