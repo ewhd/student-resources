@@ -67,7 +67,7 @@ Smart Quotes are common in "normal" text on the internet or in web browsers, and
 
 # Things you don't need to know but may find interesting
 ## Older and Uncommon Symbol Names
-The names listed above are in common parlance today, but they aren't the only names. The history of computing and English computer slang goes back decades, and before the internet used to have much greater regional variation (regions mostly centered around San Francisco, Boston, or London).
+The names listed above are in common parlance today, but they aren't the only names. The history of computing and English computer slang goes back decades, and before the internet there used to have much greater regional variation (regions mostly centered around San Francisco, Boston, and London).
 
 Those who are curious can find some of these names [here](https://mrmknight.blogspot.com/2015/01/know-your-keyboard-bang-splat-whack.html).
 ## The Waka Waka Poem
