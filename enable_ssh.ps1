@@ -1,5 +1,11 @@
 # from https://woshub.com/connect-to-windows-via-ssh/
 
+# to download this script
+#Invoke-WebRequest -Uri https://raw.githubusercontent.com/ewhd/student-resources/main/enable_ssh.ps1 -OutFile enable_ssh.ps1
+
+# to enable powershell scripts:
+#Set-ExecutionPolicy RemoteSigned
+
 # install ssh-server
 Get-WindowsCapability -Online | Where-Object Name -Like 'OpenSSH.Server*' | Add-WindowsCapability -Online
 
