@@ -5,6 +5,11 @@
 
 # to enable powershell scripts:
 #Set-ExecutionPolicy RemoteSigned
+# or
+#Set-ExecutionPolicy Unrestricted
+
+# to run something as admin in non-admin env:
+# runas /user:$env:computername\<username> "<command>"
 
 # install ssh-server
 Get-WindowsCapability -Online | Where-Object Name -Like 'OpenSSH.Server*' | Add-WindowsCapability -Online
